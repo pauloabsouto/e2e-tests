@@ -5,20 +5,25 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class TasksTest {
 
-    public WebDriver accessApplication(){
-        WebDriver driver = new ChromeDriver();
-        driver.navigate().to("http://localhost:8001/tasks");
+    public WebDriver accessApplication() throws MalformedURLException {
+        DesiredCapabilities cap = DesiredCapabilities.chrome();
+        WebDriver driver = new RemoteWebDriver(new URL("http://192.168.1.4:4444/wd/hub"), cap);
+        driver.navigate().to("http://192.168.1.4:8001/tasks");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
 
     @Test
-    public void addTask(){
+    public void addTask() throws MalformedURLException {
         WebDriver driver = accessApplication();
         try {
             driver.findElement(By.id("addTodo")).click();
@@ -34,7 +39,7 @@ public class TasksTest {
     }
 
     @Test
-    public void addTaskWithoutDescription(){
+    public void addTaskWithoutDescription() throws MalformedURLException {
         WebDriver driver = accessApplication();
         try {
             driver.findElement(By.id("addTodo")).click();
@@ -49,7 +54,7 @@ public class TasksTest {
     }
 
     @Test
-    public void addTaskWithPastDate(){
+    public void addTaskWithPastDate() throws MalformedURLException {
         WebDriver driver = accessApplication();
         try {
             driver.findElement(By.id("addTodo")).click();
